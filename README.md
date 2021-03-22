@@ -35,7 +35,8 @@ You can leave everything the same except for `tweakClass`.
 mixin {
     defaultObfuscationEnv notch
     add sourceSets.main, "mixin.exampleClient.refmap.json"
-}```
+}
+```
 
 change `exampleClient` to your client name.
 
@@ -45,7 +46,8 @@ manifest.attributes(
 		"TweakClass": 'com.exampleClient.launch.ExampleClientTweaker',
 		"TweakOrder": 0,
 		"Manifest-Version": 1.0
-)```
+)
+```
 
 Change the MixinConfigs to your .json file and change your TweakClass to your Tweaker.
 You're all set!
