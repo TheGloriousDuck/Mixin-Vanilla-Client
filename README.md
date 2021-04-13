@@ -4,7 +4,9 @@ Using Mixins to Mod Minecraft Vanilla.
 # Setup
 Download the build.gradle in this repository and open it in IntelliJ IDEA.
 
-Edit the following:
+Before you do anything, make sure that you run the `wrapper` task, and go into gradle-wrapper.properties and change the number to 4.7. ForgeGradle doesn't work with newer versions of Gradle.
+
+Now, edit the following:
 
 ```gradle
 
