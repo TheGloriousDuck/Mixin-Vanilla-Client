@@ -23,7 +23,7 @@ archivesBaseName = "ExampleClient"
 ```gradle
 minecraft {
     version = "1.8.9"
-    tweakClass = "cf.duhc.client.launch.DuckTweaker"
+    tweakClass = "exampleclient.launch.ExampleTweaker"
     mappings = "stable_22"
     runDir = 'run'
     clientJvmArgs = ["-XX:-DisableExplicitGC"] // fast world loading
