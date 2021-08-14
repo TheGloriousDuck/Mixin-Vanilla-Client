@@ -24,14 +24,10 @@ buildscript {
     }
 }
 
-configurations {
-    embed
-    compile.extendsFrom(embed)
-}
-
 apply plugin: 'net.minecraftforge.gradle.tweaker-client'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
+apply plugin: "idea"
 
 sourceCompatibility = targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
@@ -49,37 +45,10 @@ minecraft {
     makeObfSourceJar = false
 }
 
-dependencies {
-
-    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-        exclude module: 'gson'
-        exclude module: 'commons-io'
-    }
-
-    embed 'org.ow2.asm:asm:5.0.3'
-
-    embed fileTree(dir: 'libs', include: '*.jar')
-}
-
 mixin {
     // Specify "notch" or "searge" here
     defaultObfuscationEnv notch
     add sourceSets.main, "mixin.exampleClient.refmap.json"
-}
-
-repositories {
-    maven { url "https://jitpack.io" }
-    maven {
-        name = 'sponge'
-        url = 'https://repo.spongepowered.org/maven/'
-    }
-    mavenCentral()
-    jcenter()
-    flatDir {
-        dirs 'lib'
-    }
 }
 
 processResources {
@@ -99,22 +68,13 @@ jar {
         }
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-}
-
-jar {
-    manifest.attributes(
+    
+     manifest.attributes(
             "MixinConfigs": 'mixins.exampleClient.json',
             "TweakClass": 'com.exampleClient.launch.ExampleClientTweaker',
             "TweakOrder": 0,
             "Manifest-Version": 1.0
     )
-
-    configurations.embed.each { dep ->
-        from(project.zipTree(dep)) {
-            exclude 'META-INF', 'META-INF/**'
-            exclude 'org/jetbrains/annotations', 'org/jetbrains/annotations/**'
-        }
-    }
 }
 
 task wrapper(type: Wrapper) {
@@ -123,25 +83,15 @@ task wrapper(type: Wrapper) {
 
 configurations {
     mods
-    shade
-    compile.extendsFrom shade
+    addLib
+    embed
+    compile.extendsFrom(embed)
 }
-
-apply plugin: "idea"
 
 idea {
     module {
         inheritOutputDirs = true
     }
-}
-
-
-configurations {
-    deps
-    compile {
-        extendsFrom deps
-    }
-    addLib
 }
 
 dependencies {
@@ -164,12 +114,15 @@ dependencies {
     configurations.implementation.extendsFrom(configurations.addLib)
 }
 
-jar {
-    dependsOn configurations.compile
-    from {
-        configurations.embed.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
+repositories {
+    maven { url "https://jitpack.io" }
+    maven {
+        name = 'sponge'
+        url = 'https://repo.spongepowered.org/maven/'
     }
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    mavenCentral()
+    jcenter()
+    flatDir {
+        dirs 'lib'
+    }
 }
